@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example20231016.todo_3.Mapper.User_CharacterMapper">
+
+    <resultMap id="User_CharacterMap" type="com.example20231016.todo_3.Table.User_Character">
+        <id column="user_id" property="user_id" />
+        <id column="character_id" property="character_id" />
+    </resultMap>
+    <resultMap id="CharacterMap" type="com.example20231016.todo_3.Table.Character">
+        <id column="character_id" property="character_id" />
+        <result column="character_name" property="character_name" />
+        <result column="character_type" property="character_type" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!--    <select id="getAllTasks" resultMap="CharacterMap">-->
+    <!--        SELECT * FROM tasks-->
+    <!--    </select>-->
+
+
+    <select id="check" resultMap="User_CharacterMap">
+        SELECT * FROM User_Characters WHERE user_id = #{user_id}
+    </select>
+
+    <insert id="post" parameterType="com.example20231016.todo_3.Table.User_Character">
+        INSERT INTO User_Characters (user_id,character_id) VALUES (#{user_id},#{character_id})
+    </insert>
+    <delete id="delete" parameterType="com.example20231016.todo_3.Table.User_Character">
+        DELETE FROM User_Characters WHERE (character_id = #{character_id}) AND (user_id = #{user_id})
+    </delete>
+<!--    <insert id="put" parameterType="com.example20231016.todo_3.Table.User_Character">-->
+<!--        UPDATE User_Characters SET character_id=#{character_id}WHERE user_id=#{user_id}-->
+<!--    </insert>-->
+    <select id="getAllUser_Characters" resultMap="CharacterMap">
+        SELECT * FROM Characters JOIN User_Characters ON Characters.character_id =User_Characters.character_id WHERE User_Characters.user_id=#{user_id}
+    </select>
+    <select id="search" resultMap="User_CharacterMap" parameterType="com.example20231016.todo_3.Table.User_Character">
+        SELECT * FROM User_Characters WHERE (character_id=#{character_id} OR #{character_id}=0)
+                                   AND (user_id = #{user_id} OR #{user_id} =0)
+    </select>
+
+
+</mapper>

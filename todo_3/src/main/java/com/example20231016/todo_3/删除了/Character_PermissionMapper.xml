@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example20231016.todo_3.Mapper.Character_PermissionMapper">
+
+    <resultMap id="Character_PermissionMap" type="com.example20231016.todo_3.Table.Character_Permission">
+        <id column="character_id" property="character_id" />
+        <id column="permission_id" property="permission_id" />
+
+    </resultMap>
+    <resultMap id="PermissionMap" type="com.example20231016.todo_3.Table.Permission">
+        <id column="permission_id" property="permission_id" />
+        <result column="permission_name" property="permission_name" />
+        <result column="description" property="description" />
+        <result column="module" property="module" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!--    <select id="getAllTasks" resultMap="CharacterMap">-->
+    <!--        SELECT * FROM tasks-->
+    <!--    </select>-->
+
+
+    <select id="check" resultMap="Character_PermissionMap">
+        SELECT * FROM User_Characters WHERE user_id = #{user_id}
+    </select>
+
+    <insert id="post" parameterType="com.example20231016.todo_3.Table.Character_Permission">
+        INSERT INTO Character_Permissions (character_id,permission_id) VALUES (#{character_id},#{permission_id})
+    </insert>
+    <delete id="delete" parameterType="com.example20231016.todo_3.Table.Character_Permission">
+        DELETE FROM Character_Permissions WHERE (character_id = #{character_id}) AND (permission_id = #{permission_id})
+    </delete>
+    <!--    <insert id="put" parameterType="com.example20231016.todo_3.Table.User_Character">-->
+    <!--        UPDATE User_Characters SET character_id=#{character_id}WHERE user_id=#{user_id}-->
+    <!--    </insert>-->
+    <select id="getAllCharacter_Permissions" resultMap="PermissionMap">
+        SELECT * FROM Permissions JOIN Character_Permissions ON Permissions.permission_id =Character_Permissions.permission_id WHERE Character_Permissions.character_id=#{character_id}
+    </select>
+    <select id="search" resultMap="Character_PermissionMap" parameterType="com.example20231016.todo_3.Table.Character_Permission">
+        SELECT * FROM Character_Permissions WHERE (character_id=#{character_id} OR #{character_id}=0)
+                                        AND (permission_id = #{permission_id} OR #{permission_id} =0) ORDER BY character_id
+    </select>
+
+
+</mapper>

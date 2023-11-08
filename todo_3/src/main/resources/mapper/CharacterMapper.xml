@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example20231016.todo_3.Mapper.CharacterMapper">
+
+    <resultMap id="CharacterMap" type="com.example20231016.todo_3.Table.Character">
+        <id column="character_id" property="character_id" />
+        <result column="character_name" property="character_name" />
+        <result column="character_type" property="character_type" />
+        <result column="status" property="status" />
+    </resultMap>
+
+<!--    <select id="getAllTasks" resultMap="CharacterMap">-->
+<!--        SELECT * FROM tasks-->
+<!--    </select>-->
+
+
+    <select id="check" resultMap="CharacterMap">
+        SELECT * FROM Characters WHERE character_id = #{character_id}
+    </select>
+
+    <insert id="post" parameterType="com.example20231016.todo_3.Table.Character">
+        INSERT INTO Characters (character_name,character_type,status) VALUES (#{character_name},#{character_type},#{status})
+    </insert>
+    <delete id="delete" parameterType="com.example20231016.todo_3.Table.Character">
+        DELETE FROM Characters WHERE character_id = #{character_id}
+    </delete>
+    <insert id="put" parameterType="com.example20231016.todo_3.Table.Character">
+        UPDATE Characters SET character_name=#{character_name}, character_type=#{character_type},status=#{status}WHERE character_id=#{character_id}
+    </insert>
+    <select id="getAllCharacters" resultMap="CharacterMap">
+        SELECT * FROM Characters
+    </select>
+    <select id="search" resultMap="CharacterMap" parameterType="com.example20231016.todo_3.Table.Character">
+        SELECT * FROM Characters WHERE (character_id=#{character_id} OR #{character_id}=0)
+                              AND (character_name = #{character_name} OR #{character_name} ='')
+                              AND (character_type = #{character_type} OR #{character_type} ='')
+    </select>
+
+    <select id="getCharacterIdByUserId" resultType="java.lang.Integer">
+        SELECT character_id FROM User_Characters WHERE user_id=#{user_id}
+    </select>
+
+
+</mapper>
