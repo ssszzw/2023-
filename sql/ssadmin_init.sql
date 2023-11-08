@@ -52,7 +52,8 @@ CREATE TABLE `Users` (
 
 INSERT INTO `Users` (`user_id`, `user_name`, `password`, `name`, `status`, `login_ip`, `login_date`, `tenant_id`, `create_time`, `update_time`, `creator`, `updater`, `deleted`) VALUES
 (1, 'sysadmin', '$2a$10$2n91ncs5vNaKEwcuk9dFVuwpm8o3kpj17YW0Ne.6.e.AF.m0MuBPa', 'admin', 0, NULL, '2023-10-28 10:57:02', 1, '2023-10-28 10:57:30', '2023-10-28 10:57:30', NULL, NULL, 0),
-(2, 'user', '$2a$10$2n91ncs5vNaKEwcuk9dFVuwpm8o3kpj17YW0Ne.6.e.AF.m0MuBPa', 'admin', 0, NULL, '2023-10-28 10:57:02', 1, '2023-10-28 10:57:30', '2023-10-28 10:57:30', NULL, NULL, 0);
+(2, 'user', '$2a$10$2n91ncs5vNaKEwcuk9dFVuwpm8o3kpj17YW0Ne.6.e.AF.m0MuBPa', 'admin', 0, NULL, '2023-10-28 10:57:02', 1, '2023-10-28 10:57:30', '2023-10-28 10:57:30', NULL, NULL, 0),
+(1, 'szw', '123456', 'admin', 0, NULL, '2023-10-28 10:57:02', 1, '2023-10-28 10:57:30', '2023-10-28 10:57:30', NULL, NULL, 0);
 
 --
 -- 转储表的索引
