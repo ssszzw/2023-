@@ -4,7 +4,7 @@ RUN mkdir -p /ssadmin-server
 WORKDIR /ssadmin-server
 
 ## 将Jar 文件复制到镜像中
-COPY ./target/tode_3.jar app.jar
+COPY ./target/todo_3-0.0.1-SNAPSHOT.jar app.jar
 
 ## 设置 TZ 时区
 ENV TZ=Asia/Shanghai
