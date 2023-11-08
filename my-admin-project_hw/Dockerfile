@@ -3,7 +3,7 @@ FROM node:16-alpine as build-stage
 WORKDIR /admim
 
 # COPY .npmrc package.json yarn.lock ./
-COPY .npmrc package.json ./
+COPY .npmrc package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
