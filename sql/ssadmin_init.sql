@@ -57,7 +57,7 @@ USE `www_RBAC_com`;
 
 -- --
 -- 转储表的索引
---
+--CREATE USER 'user'@'localhost' IDENTIFIED BY 'password'
 CREATE TABLE `Users` (
   `user_id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -77,8 +77,8 @@ CREATE TABLE `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `Users` (`user_id`, `name`,`gender`,`user_name`, `password`, `phone_number`, `status`) VALUES
-(1, '真名name', '男', 'szw', '123456', '999888723432'),
-(2, '真名name2', '男', 'szw2', '123456', '75643');
+(1, '真名name', '男', 'szw', '123456', '999888723432',0),
+(2, '真名name2', '男', 'szw2', '123456', '75643',1);
 
 
 
