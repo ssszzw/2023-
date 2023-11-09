@@ -4,9 +4,12 @@ services:
   mysql:
     container_name: ssadmin-mysql
     image: mysql:8
+    security_opt:
+      - seccomp:unconfined
     restart: unless-stopped
     tty: true
     ports:
+    # docker安全验证
       - "3306:3306"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-root}

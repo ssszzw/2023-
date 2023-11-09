@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 --
 -- 创建新数据库 ssadmin 并选择
 CREATE DATABASE IF NOT EXISTS `www_RBAC_com` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
--- USE `www_RBAC_com`;
+USE `www_RBAC_com`;
 
 -- --------------------------------------------------------
 
