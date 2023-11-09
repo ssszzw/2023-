@@ -59,7 +59,7 @@ USE `www_RBAC_com`;
 -- 转储表的索引
 --
 CREATE TABLE `Users` (
-  `user_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `gender` varchar(255) DEFAULT NULL,
   `user_name` varchar(255) NOT NULL,
@@ -71,10 +71,14 @@ CREATE TABLE `Users` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
 
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_name` (`user_name`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `Users` (`user_id`, `name`,`gender`,`user_name`, `password`, `phone_number`, `status`) VALUES
-(1, '真名name', '男', 'szw', '123456', '999888723432');
+(1, '真名name', '男', 'szw', '123456', '999888723432'),
+(2, '真名name2', '男', 'szw2', '123456', '75643');
 
 
 
@@ -85,9 +89,9 @@ INSERT INTO `Users` (`user_id`, `name`,`gender`,`user_name`, `password`, `phone_
 --
 -- 表的索引 `system_users`
 --
-ALTER TABLE `Users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `user_name` (`user_name`);
+-- ALTER TABLE `Users`
+--   ADD PRIMARY KEY (`user_id`),
+--   ADD UNIQUE KEY `user_name` (`user_name`);
 
 --
 -- 在导出的表使用AUTO_INCREMENT
@@ -96,8 +100,8 @@ ALTER TABLE `Users`
 --
 -- 使用表AUTO_INCREMENT `system_users`
 --
-ALTER TABLE `Users`
-  MODIFY `user_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+-- ALTER TABLE `Users`
+--   MODIFY `user_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
