@@ -58,7 +58,7 @@ USE `www_RBAC_com`;
 -- --
 -- 转储表的索引
 --
-REATE TABLE `Users` (
+CREATE TABLE `Users` (
   `user_id` bigint NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `gender` varchar(255) DEFAULT NULL,
