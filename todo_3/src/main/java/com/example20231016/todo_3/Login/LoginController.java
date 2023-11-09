@@ -27,11 +27,11 @@ public class LoginController {
         User user = userMapper.findByUsername(loginUser.getUsername());
 
         if (user == null) {
-            return CommonResult.error(50007,"登录失败，账号密码不正确");
+            return CommonResult.error(50007,"登录失败，账号密码不正确null");
         }
 
         if (!loginUser.getPassword().equals(user.getPassword())) {
-            return CommonResult.error(50007,"登录失败，账号密码不正确");
+            return CommonResult.error(50007,"登录失败，账号密码不正确error");
         }
 
 //        String username = loginUser.getUsername();
