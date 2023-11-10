@@ -1,3 +1,5 @@
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -32,10 +34,6 @@ CREATE TABLE `Users` (
 INSERT INTO `Users` (`user_id`, `name`,`gender`,`user_name`, `password`, `phone_number`, `status`) VALUES
 (1, '真名name', '男', 'szw', '123456', '999888723432',0),
 (2, '真名name2', '男', 'szw2', '123456', '75643',1);
-
-
-
-
 
 
 
