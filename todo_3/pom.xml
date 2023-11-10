@@ -97,6 +97,21 @@
             <name>aliyun</name>
             <url>https://maven.aliyun.com/repository/public</url>
         </repository>
+        <repository>
+            <id>netease</id>
+            <url>http://maven.netease.com/repository/public/</url>
+            <mirrorOf>central</mirrorOf>
+        </repository>
+        <repository>
+            <id>huaweicloud</id>
+            <url>https://repo.huaweicloud.com/repository/maven/</url>
+            <mirrorOf>central</mirrorOf>
+        </repository>
+        <repository>
+            <id>tencent</id>
+            <url>https://mirrors.cloud.tencent.com/repository/maven/</url>
+            <mirrorOf>central</mirrorOf>
+        </repository>
     </repositories>
 
 </project>
