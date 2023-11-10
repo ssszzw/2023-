@@ -12,7 +12,7 @@ services:
     # docker安全验证
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-www_RBAC_com}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
     volumes:
       - mysql:/var/lib/mysql/
