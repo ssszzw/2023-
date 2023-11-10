@@ -103,7 +103,7 @@
             <mirrorOf>central</mirrorOf>
         </repository>
         <repository>
-            <id>huaweicloud</id>
+            <id>huaweicloud2</id>
             <url>https://repo.huaweicloud.com/repository/maven/</url>
             <mirrorOf>central</mirrorOf>
         </repository>
