@@ -100,17 +100,17 @@
         <repository>
             <id>netease</id>
             <url>http://maven.netease.com/repository/public/</url>
-            <mirrorOf>central</mirrorOf>
+            <name>netease</name>
         </repository>
         <repository>
             <id>huaweicloud2</id>
             <url>https://repo.huaweicloud.com/repository/maven/</url>
-            <mirrorOf>central</mirrorOf>
+            <name>huaweicloud2</name>
         </repository>
         <repository>
             <id>tencent</id>
             <url>https://mirrors.cloud.tencent.com/repository/maven/</url>
-            <mirrorOf>central</mirrorOf>
+            <name>tencent</name>
         </repository>
     </repositories>
 
