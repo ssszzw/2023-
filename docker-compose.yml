@@ -30,7 +30,7 @@ services:
   server:
     container_name: ssadmin-server
     build:
-      context: ./todo_3/
+      context: ./RBAC-server/
     image: ssadmin-server
     restart: unless-stopped
     ports:
@@ -55,7 +55,7 @@ services:
   web:
     container_name: ssadmin-web
     build:
-      context: ./my-admin-project_hw
+      context: ./RBAC-web
       args:
         NODE_ENV:
           ENV=${NODE_ENV:-production}
