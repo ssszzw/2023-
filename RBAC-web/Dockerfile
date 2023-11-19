@@ -5,6 +5,12 @@ WORKDIR /admim
 # COPY .npmrc package.json yarn.lock ./
 COPY .npmrc package.json yarn.lock ./
 
+# RUN yarn install --frozen-lockfile
+
+# Set NODE_ENV environment variable
+ARG NODE_ENV
+ENV NODE_ENV ${NODE_ENV}
+
 RUN yarn install --frozen-lockfile
 
 COPY . .
