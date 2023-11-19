@@ -1,4 +1,3 @@
-import { userSetter } from "core-js/fn/symbol"
 import { Icon } from "element-ui"
 import { getMenu } from '@/api/menu'
 
