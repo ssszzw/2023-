@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example20231016.todo_3.Mapper.CharacterMapper">
+<mapper namespace="com.example20231016.RBAC_server.Mapper.CharacterMapper">
 
-    <resultMap id="CharacterMap" type="com.example20231016.todo_3.Table.Character">
+    <resultMap id="CharacterMap" type="com.example20231016.RBAC_server.Table.Character">
         <id column="character_id" property="character_id" />
         <result column="character_name" property="character_name" />
         <result column="character_type" property="character_type" />
         <result column="status" property="status" />
+        <result column="create_time" property="create_time" />
+        <result column="update_time" property="update_time" />
     </resultMap>
 
 <!--    <select id="getAllTasks" resultMap="CharacterMap">-->
@@ -18,19 +20,19 @@
         SELECT * FROM Characters WHERE character_id = #{character_id}
     </select>
 
-    <insert id="post" parameterType="com.example20231016.todo_3.Table.Character">
+    <insert id="post" parameterType="com.example20231016.RBAC_server.Table.Character">
         INSERT INTO Characters (character_name,character_type,status) VALUES (#{character_name},#{character_type},#{status})
     </insert>
-    <delete id="delete" parameterType="com.example20231016.todo_3.Table.Character">
+    <delete id="delete" parameterType="Integer">
         DELETE FROM Characters WHERE character_id = #{character_id}
     </delete>
-    <insert id="put" parameterType="com.example20231016.todo_3.Table.Character">
+    <insert id="put" parameterType="com.example20231016.RBAC_server.Table.Character">
         UPDATE Characters SET character_name=#{character_name}, character_type=#{character_type},status=#{status}WHERE character_id=#{character_id}
     </insert>
     <select id="getAllCharacters" resultMap="CharacterMap">
         SELECT * FROM Characters
     </select>
-    <select id="search" resultMap="CharacterMap" parameterType="com.example20231016.todo_3.Table.Character">
+    <select id="search" resultMap="CharacterMap" parameterType="com.example20231016.RBAC_server.Table.Character">
         SELECT * FROM Characters WHERE (character_id=#{character_id} OR #{character_id}=0)
                               AND (character_name = #{character_name} OR #{character_name} ='')
                               AND (character_type = #{character_type} OR #{character_type} ='')
@@ -39,6 +41,18 @@
     <select id="getCharacterIdByUserId" resultType="java.lang.Integer">
         SELECT character_id FROM User_Characters WHERE user_id=#{user_id}
     </select>
+    <select id="getCharacterByCharacterId" resultMap="CharacterMap">
+        SELECT * FROM Characters WHERE character_id = #{character_id}
+    </select>
+
+    <insert id="saveCharacterPermission">
+        INSERT INTO Character_Permissions (character_id,permission_id) VALUES (#{character_id},#{permission_id})
+    </insert>
+    <delete id="deleteCharacterPermission">
+        DELETE FROM Characters WHERE character_id = #{character_id} AND permission_id = #{permission_id}
+    </delete>
+
+
 
 
 </mapper>

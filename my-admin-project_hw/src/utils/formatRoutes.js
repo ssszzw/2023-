@@ -1,3 +1,4 @@
+import { userSetter } from "core-js/fn/symbol"
 import { Icon } from "element-ui"
 import { getMenu } from '@/api/menu'
 
@@ -32,33 +33,29 @@ export const formatRoutes = (routes) => {
   }
 
   export function initAdminMenu(router,store){
+    return new Promise((resolve, reject) => {
+      // 在这里执行initAdminMenu的逻辑
+      if (store.state.adminMenus.length > 0) {
+        resolve();
+      }else{
+        getMenu().then( res=>{
+          if(res.code==200){
+            // 格式化路由数据
+            const formattedRoutes = formatRoutes(res.data);
+            
+            console.log("formattedRoutes:",formattedRoutes);
+            formattedRoutes.forEach(route=>{
+              router.addRoute(route);
+              console.log("route:",route);
+            })
+            // 存储到 Vuex Store 的 adminMenu 中
+            store.commit('setAdminMenu', formattedRoutes);
+            resolve();
+          }
+        })
+      }
+    });
 
-    if (store.state.adminMenus.length > 0) {
-      // console.log(store.state.adminMenus.length,"----------------------444444");
-      return;
-    }else{
-
-      getMenu().then( res=>{
-        if(res.code==200){
-          // 格式化路由数据
-  
-          const formattedRoutes = formatRoutes(res.data);
-  
-          // router.addRoute(formattedRoutes);
-          console.log(formattedRoutes);
-          // console.log(store.state.adminMenus.length,"------------------55555555555555");
-  
-  
-          formattedRoutes.forEach(route=>{
-            router.addRoute(route);
-            console.log(route);
-          })
-        
-          // 存储到 Vuex Store 的 adminMenu 中
-          store.commit('setAdminMenu', formattedRoutes);
-  
-        }
-      })
-    }
+    
 
   }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example20231016.todo_3.Mapper.MenuMapper">
+<mapper namespace="com.example20231016.RBAC_server.Mapper.MenuMapper">
 
-    <resultMap id="MenuMap" type="com.example20231016.todo_3.Table.Menu">
+    <resultMap id="MenuMap" type="com.example20231016.RBAC_server.Table.Menu">
         <id column="menu_id" property="menu_id" />
         <result column="menu_name" property="menu_name" />
         <result column="parent_id" property="parent_id" />
@@ -22,7 +22,7 @@
     <select id="getMenuByMenuId" resultMap="MenuMap">
         SELECT * FROM Menus WHERE menu_id=#{menu_id}
     </select>
-<!--    <select id="search" resultMap="UserMap" parameterType="com.example20231016.todo_3.Table.User">-->
+<!--    <select id="search" resultMap="UserMap" parameterType="com.example20231016.RBAC_server.Table.User">-->
 <!--        SELECT * FROM Users WHERE (user_id=#{id} OR #{id}=0)-->
 <!--                              AND (name = #{name} OR #{name} ='')-->
 <!--                              AND (gender = #{gender} OR #{gender} ='')-->

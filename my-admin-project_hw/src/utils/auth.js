@@ -1,17 +1,24 @@
 const AccessTokenKey = 'ACCESS_TOKEN'
+const RefreshTokenKey = 'REFRESH_TOKEN'
+
 const MenuInfo='MENU_INFO'
 
-// 获取 Token
+// 获取 ACCESS_TOKEN
 export function getAccessToken() {
   return localStorage.getItem(AccessTokenKey)
 }
-// 设置 Token
-export function setToken(token) {
-  localStorage.setItem(AccessTokenKey, token)
+// 获取 REFRESH_TOKEN
+export function getRefreshToken() {
+  return localStorage.getItem(RefreshTokenKey)
 }
-// 删除 Token
+export function setToken(token) {
+  localStorage.setItem(AccessTokenKey, token.accessToken)
+  localStorage.setItem(RefreshTokenKey, token.refreshToken)
+}
+
 export function removeToken() {
   localStorage.removeItem(AccessTokenKey)
+  localStorage.removeItem(RefreshTokenKey)
 }
 
 // //设置 MenuInfo

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import {getAccessToken, getRefreshToken} from '@/utils/auth'
 
 // 用户登录
 export function login(username, password) {
@@ -37,9 +38,9 @@ export function postUser(user) {
   })
 }
 //删除用户
-export function deleteUser(username) {
+export function deleteUser(id) {
   const data = {
-    username
+    id
   }
   return request({
     url: '/user/deleteUser',
@@ -69,5 +70,28 @@ export function searchUser(user) {
     url: '/user/searchUser',
     method: 'get',
     params:user
+  })
+}
+// 退出方法
+export function logout() {
+  const data = {
+    accessToken : getAccessToken(),
+    refreshToken : getRefreshToken(),
+  }
+  return request({
+    url: '/system/auth/logout',
+    method: 'post',
+    data:data
+  })
+}
+// 刷新访问令牌
+export function refreshToken() {
+
+  console.log("进入了refreshToken----前端接口");
+  return request({
+    url: '/system/auth/refreshToken' ,
+    method: 'post',
+    data: { refreshToken:getRefreshToken() },
+
   })
 }

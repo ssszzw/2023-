@@ -1,6 +1,6 @@
 <template>
   <div class="user-list">
-    <el-form :inline="true" ref="formSearch" :model="userSearch" :rules="rulesSearch" label-width="">
+    <el-form :inline="true" ref="formSearch" :model="userSearch" :rules="rulesSearch" label-width="80px">
       <el-form-item label="用户id" prop="id">
         <el-input v-model="userSearch.id"></el-input>
       </el-form-item>
@@ -34,17 +34,20 @@
     </el-dialog>
 
     <el-table :data="users" style="width: 100%">
-      <el-table-column prop="id" label="用户id"></el-table-column>
+      <el-table-column prop="id" label="用户id" width="150"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="gender" label="性别"></el-table-column>
+      <el-table-column prop="gender" label="性别" width="150"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
-      <el-table-column label="用户操作">
+      <el-table-column label="用户操作" width="300">
         <template slot-scope="scope">
-          <el-button @click="deleteUserIfNeeded(scope)">删除</el-button>
-        <!-- </template>
-        <template slot-scope="oneRowUserInfo2"> -->
-          <el-button type="primary" @click="changeDialog(scope)">修改</el-button>
+          <div class="button-container">
+            <el-button @click="deleteUserIfNeeded(scope)">删除</el-button>
+            <!-- </template>
+            <template slot-scope="oneRowUserInfo2"> -->
+            <el-button type="primary" @click="changeDialog(scope)">修改</el-button>
+            <el-button type="success" @click="assignRole(scope)">分配角色</el-button>
+          </div>
           <el-dialog title="修改用户信息" :visible.sync="dialogVisibleModify" width="50%">
             <!-- <ModifyUser v-on:changeDialogVisibleModify = "changeDialogVisibleModify" :oneRowUserInfoParent="scope"></ModifyUser> -->
             <h1>修改用户Add</h1><!--修改用户表单-->
@@ -79,6 +82,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="分配角色" :visible.sync="dialogVisibleRole" width="50%">
+      <el-checkbox-group v-model="selectedRoles">
+        <el-checkbox v-for="role in roles" :label="role.character_id" :key="role.character_id">
+          {{ role.character_name }}
+        </el-checkbox>
+      </el-checkbox-group>
+      <div>已分配的角色: {{ assignedRoles.map(role => role.character_name).join(', ') }}</div>
+      <el-button type="primary" @click="saveRoles">保存</el-button>
+    </el-dialog>
   </div>
 </template>
 
@@ -88,6 +100,7 @@ import AddUser from "./Add.vue";
 import { deleteUser } from "@/api/login";
 import { modifyUser } from '@/api/login.js';
 import { searchUser } from '@/api/login.js';
+import { getRoles, getAssignedRoles, assignRoles } from '@/api/roles';
 
 
 export default {
@@ -114,7 +127,7 @@ export default {
           name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
           gender: [{ required: true, message: "请选择性别", trigger: "change" }],
           phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
-        },
+      },
       rulesSearch:{
         id: [{ required: false, message: "请输入用户id"}],
         username: [{ required: false, message: "请输入用户名", trigger: "blur" }],
@@ -122,7 +135,13 @@ export default {
         name: [{ required: false, message: "请输入姓名", trigger: "blur" }],
         gender: [{ required: false, message: "请选择性别", trigger: "change" }],
         phone: [{ required: false, message: "请输入手机号", trigger: "blur" }],
-      }
+      },
+      //分配角色的
+      dialogVisibleRole: false,
+      roles: [],
+      assignedRoles: [],
+      selectedRoles: [],
+      currentUser:{},
     };
   },
   mounted() {
@@ -133,17 +152,69 @@ export default {
   },
   methods: {
     //获取用户信息
-    getInfoIfNeeded(){
-      getInfo().then((res) => {
-        const users = res.data.map((item) => ({  
-          id: item.id, // 根据实际情况调整属性映射  
-          username: item.username,  
-          name: item.name,  
-          gender: item.gender,  
-          phone: item.phone,  
-        }));  
+    async getInfoIfNeeded() {
+      try {
+        const res = await getInfo();
+        console.log("res:------------------------",res);
+        this.users = res.data.map((item) => ({
+          id: item.id,
+          username: item.username,
+          name: item.name,
+          gender: item.gender,
+          phone: item.phone,
+        }));
+      } catch (error) {
+        console.error("获取用户信息失败", error);
+      }
+    },
+    async deleteUserIfNeeded(oneRowUserInfo) {
+      if (confirm('确定要删除该用户吗？')) {
+        try {
+          const res = await deleteUser(oneRowUserInfo.row.id);
+          console.log("oneRowUserInfo:",oneRowUserInfo,);
+          if (res.code === 200) {
+            this.$message.success('删除成功');
+            this.getInfoIfNeeded();
+          } else {
+            this.$message.error('删除失败');
+          }
+        } catch (error) {
+          this.$message.error('发生了错误');
+          console.error("删除用户失败", error);
+        }
+      }
+    },
+    async submitFormModify() {
+      try {
+        await this.$refs.formModify.validate();
+        const res = await modifyUser(this.userDialog);
+        if (res.code === 200) {
+          this.$message.success('修改成功');
+          this.dialogVisibleModify = false;
+          this.getInfoIfNeeded();
+        } else {
+          this.$message.error('修改失败');
+        }
+      } catch (error) {
+        this.$message.error('发生了错误');
+        console.error("修改用户失败", error);
+      }
+    },
+    async submitFormSearch() {
+      try {
+        const res = await searchUser(this.userSearch);
+        const users = res.data.map((item) => ({
+          id: item.id,
+          username: item.username,
+          name: item.name,
+          gender: item.gender,
+          phone: item.phone,
+        }));
         this.users = users;
-      });
+      } catch (error) {
+        this.$message.error('搜索失败了');
+        console.error("搜索用户失败", error);
+      }
     },
     changeDialogVisibleAdd(data){
         // 接收到子组件传递的数据  
@@ -152,97 +223,63 @@ export default {
     },
     changeDialog(scope){
         this.dialogVisibleModify = true;
-        this.userDialog.id=scope.row.id;
-        this.userDialog.username=scope.row.username;
-        this.userDialog.password="";
-        this.userDialog.name=scope.row.name;
-        this.userDialog.gender=scope.row.gender;
-        this.userDialog.phone=scope.row.phone;
+        this.userDialog = {
+          id: scope.row.id,
+          username: scope.row.username,
+          password: "",
+          name: scope.row.name,
+          gender: scope.row.gender,
+          phone: scope.row.phone,
+        };
         this.getInfoIfNeeded();
-    },
-    //删除用户
-    deleteUserIfNeeded(oneRowUserInfo) {
-      if (confirm('确定要删除该用户吗？')) {
-        console.log(oneRowUserInfo);
-        console.log(oneRowUserInfo.row.username);
-        deleteUser(oneRowUserInfo.row.username)
-        .then(res =>{
-          if(res.code===200)
-            // this.$router.push({ path: '/' })
-          {
-            this.$message.success('删除成功')
-            this.getInfoIfNeeded();
-          }
-          else
-          {
-            this.$message.error('删除失败')
-          }
-        })
-        .catch(() => {
-          this.$message.error('发生了错误')
-          this.loading = false
-        })
-        // console.log(row);
-      };
-      this.getInfoIfNeeded();
-    },
-    submitFormModify() {//提交用户表单
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          modifyUser(this.userDialog)
-          .then(res =>{
-            if(res.code===200)
-            {//修改成功
-              this.$message.success('修改成功')
-              this.dialogVisibleModify=false;
-              this.getInfoIfNeeded();
-              // this.resetForm
-              // this.$emit('changeDialogVisibleModify',false)
-            }
-            else
-            { // 修改失败
-              this.$message.error('修改失败')
-            }
-          })
-          .catch(() => {
-            // 修改失败
-            this.$message.error('用户名或密码错误')
-            this.loading = false
-          })
-          // TODO: send user data to backend
-          console.log(this.userDialog);
-        } else {
-          console.log("form validation failed");
-        }
-      });
-    },
-    submitFormSearch(){
-      searchUser(this.userSearch)
-      .then(res =>{
-        const users = res.data.map((item) => ({  
-          id: item.id, // 根据实际情况调整属性映射  
-          username: item.username,  
-          name: item.name,  
-          gender: item.gender,  
-          phone: item.phone,  
-        }));  
-        this.users = users;
-        console.log("在then里面");
-      })
-      .catch(() => {
-        // 修改失败
-        this.$message.error('搜索失败了');
-        this.loading = false;
-        // console.log(res);
-
-      })
     },
     resetFormModify() {
         this.$refs.formModify.resetFields();
       },
     resetFormSearch(){
       this.$refs.formSearch.resetFields();
-    }
+    },
+    //分配角色
+    async assignRole(scope) {
+      try {
+        // 获取角色列表
+        const ress = await getRoles();
+        this.roles = ress.data;
+        // 获取当前用户已分配的角色
+        const res= await getAssignedRoles({ userId: scope.row.id });
+         
+        // console.log("getAssignedRoles:",res);
+
+        //  this.assignedRoles = res.data;
+        // this.assignedRoles = res.data.map((item) => item.character_id);
+        this.assignedRoles = res.data || [];
+        console.log("this.assignedRoles:",this.assignedRoles);
+
+        this.selectedRoles=this.assignedRoles.map((item) => item.character_id);
+
+        // 显示分配角色的对话框
+        this.dialogVisibleRole = true;
+        this.currentUser=scope.row;
+      } catch (error) {
+        console.error('获取角色信息失败', error);
+      }
+    },
+    async saveRoles() {
+      try {
+        // 提交选定的角色
+        // const plainArray = this.selectedRoles.slice();
+        console.log("this.selectedRoles:",this.selectedRoles);
+        // console.log("plainArray:",plainArray);
+
+        await assignRoles(this.selectedRoles, this.currentUser.id);
+
+        this.$message.success('角色分配成功');
+        this.dialogVisibleRole = false;
+      } catch (error) {
+        this.$message.error('角色分配失败');
+        console.error('角色分配失败', error);
+      }
+    },
   },
 }
 </script>
@@ -250,6 +287,10 @@ export default {
 <style>
 .user-list {
   padding: 20px;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;  /* 这会在容器内平均分配空间 */
 }
 </style>
   

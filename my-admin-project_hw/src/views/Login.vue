@@ -26,9 +26,12 @@
   
   <script>
   import {login} from '@/api/login.js'
-  import { setToken,setMenuINfo} from '@/utils/auth'//在前端保存的MenuInfo
+  import { setToken,setMenuINfo,getAccessToken} from '@/utils/auth'//在前端保存的MenuInfo
   import {getMenu} from '@/api/menu.js'//从后端getMenu
   import {initAdminMenu} from '@/utils/formatRoutes'
+  import router from '@/router'
+  import store from '@/store'
+
   export default {
     data() {
       return {
@@ -51,14 +54,11 @@
             // 登录处理逻辑中增加网络请求
           login(this.loginForm.username,this.loginForm.password).then(res =>{
             if(res.code===200){
-              setToken(res.data.accessToken)
-              // getMenu().then(res =>{
-              //   setMenuINfo(formatRoutes(res.data))
-              // })
-              // this.$store.commit(addLoginUsername,this.loginForm.username);
-              // initAdminMenu();
+              setToken(res.data)
 
-              this.$router.push({ path: '/' })
+              initAdminMenu(router,store).then(() => {
+                this.$router.push({ path: '/' });
+              });
               // 假设res.data.token是从后端接口返回的token
             }
             else

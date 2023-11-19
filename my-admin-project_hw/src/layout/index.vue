@@ -126,28 +126,38 @@ export default {
   </template>
   
   <script>
-      export default {
-        name: 'AdminMenu',
-        computed: {
-          adminMenus () {
-            console.log("++++++++++++",this.$store.state.adminMenus);
-            return this.$store.state.adminMenus
-          }
+  import { removeToken } from '@/utils/auth'
+  import router from '@/router';
+  import store from '@/store';
+
+    export default {
+    name: 'AdminMenu',
+    computed: {
+        adminMenus () {
+        return this.$store.state.adminMenus
+        }
+    },
+    methods: {
+        logout() {
+        this.$confirm('确定注销并退出系统吗？', '提示').then(async () => {
+            await store.dispatch('LogOut').then(() => {
+                router.push({ path: '/login' });
+            })
+            removeToken() // 清除token
+            // this.$router.push({ path: '/login' }) // 重定向到登录页面
+        }).catch(() => {
+
+        });
         },
-        methods: {
-            logout() {
-            this.$confirm('确定注销并退出系统吗？', '提示').then(() => {
-                removeToken() // 清除token
-                this.$router.push({ path: '/login' }) // 重定向到登录页面
-            }).catch(() => {
+    }
 
-            });
-            },
-        }
-
-        }
+    }
   </script>
    <style lang="scss" scoped>
+   .app-container{
+    display: flex;
+    height: 100vh;
+   }
    .side-bar {
    display: flex;
    height: 100vh;
